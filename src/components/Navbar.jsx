@@ -4,18 +4,18 @@ import styled from 'styled-components';
 
 const Navbar = () => {
   return (
-    <SideBar>
+    <NavBar>
       <StyledNavLink to='/'>Home</StyledNavLink>
       <StyledNavLink to='/movies'>Movies</StyledNavLink>
-    </SideBar>
+    </NavBar>
   );
 };
 
-const SideBar = styled.nav`
+const NavBar = styled.nav`
   background-color: #023047;
   justify-content: flex-start;
   align-items: center;
-  min-height: 8vh;
+  height: 8vh;
   display: flex;
   gap: 25px;
   padding-left:50px;

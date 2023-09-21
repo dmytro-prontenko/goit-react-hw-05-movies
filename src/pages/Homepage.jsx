@@ -16,7 +16,7 @@ const Homepage = () => {
     const getTrending = async () => {
       setLoading(true);
       try {
-        const { data } = await axios.get(URL); //.then(res=>res.data.results)
+        const { data } = await axios.get(URL);
         setTrending(data.results);
       } catch (error) {
         setTrending([]);
@@ -32,9 +32,9 @@ const Homepage = () => {
 
   const trendList = trending.map(({ id, original_title }) => {
     return (
-      <TrendItem key={id} id={id}>
-        <Link to={`/movies/${id}`}>{original_title}</Link>
-      </TrendItem>
+      <Link to={`/movies/${id}`} key={id} id={id}>
+        {original_title}
+      </Link>
     );
   });
 
