@@ -6,15 +6,17 @@ import Layout from './Layout';
 import Homepage from 'pages/Homepage';
 import Movies from 'pages/Movies';
 import NotFound from 'pages/NotFound';
+import Movie from 'pages/Movie';
 
 export const App = () => {
   return (
     <>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Homepage/>} />
-          <Route path="movies" element={<Movies/>} />
-          <Route path="*" element={<NotFound/>} />
+          <Route index element={<Homepage />} />
+          <Route path="movies" element={<Movies />} />
+          <Route path="movie/:id" element={<Movie />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </>

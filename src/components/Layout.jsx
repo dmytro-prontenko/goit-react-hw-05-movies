@@ -8,7 +8,7 @@ const Layout = () => {
     <LayoutWrapper>
       <Navbar />
       <WrapperOutlet>
-          <Outlet />
+        <Outlet />
       </WrapperOutlet>
     </LayoutWrapper>
   );
@@ -17,6 +17,9 @@ const Layout = () => {
 const LayoutWrapper = styled.main`
   display: grid;
   grid-template-columns: 1fr;
+  /* background-color: #8ECAE6; */
+  color: #023047;
+  min-height: 100wh;
 `;
 
 const WrapperOutlet = styled.div``;

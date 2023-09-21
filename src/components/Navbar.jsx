@@ -12,13 +12,13 @@ const Navbar = () => {
 };
 
 const SideBar = styled.nav`
-  background-color: tomato;
-  justify-content: center;
+  background-color: #023047;
+  justify-content: flex-start;
   align-items: center;
-  min-height: 20vh;
-  border-bottom: 2px solid black;
+  min-height: 8vh;
   display: flex;
   gap: 25px;
+  padding-left:50px;
 `;
 
 export const StyledNavLink = styled(NavLink)`
@@ -27,20 +27,19 @@ export const StyledNavLink = styled(NavLink)`
   align-items: center;
   gap: 10px;
 
-  /* height: 20px; */
   padding: 5px;
   border-radius: 4px;
   text-decoration: none;
-  color: black;
+  color: #FFB703;
 
   &.active {
-    background-color: black;
-    color: tomato;
+    background-color: #FFB703;
+    color: #023047;
   }
 
   &:hover:not(.active) {
     background-color: lightblue;
-    color: tomato;
+    color: #023047;
   }
 `;
 
