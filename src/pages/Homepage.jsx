@@ -11,7 +11,7 @@ const Homepage = () => {
     'https://api.themoviedb.org/3/trending/movie/day?language=en-US&api_key=aa52440038ee3147b8058c354c3c644b';
   const [trending, setTrending] = useState([]);
   const [loading, setLoading] = useState(false);
-
+ 
   useEffect(() => {
     const getTrending = async () => {
       setLoading(true);
