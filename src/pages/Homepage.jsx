@@ -16,8 +16,8 @@ const Homepage = () => {
     const getTrending = async () => {
       setLoading(true);
       try {
-        const { data } = await axios.get(URL);
-        setTrending(data.results);
+        const { data:{results} } = await axios.get(URL);
+        setTrending(results);
       } catch (error) {
         setTrending([]);
         setLoading(false);

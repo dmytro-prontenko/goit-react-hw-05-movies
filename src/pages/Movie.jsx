@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, Outlet, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
@@ -36,36 +36,38 @@ const Movie = () => {
       <BackButton type="button">🔙</BackButton>
       {loading && <h3>Loading</h3>}
       {!loading && (
-        <StyledMovieCard>
-          <div>
-            <img
-              src={
-                movie.poster_path
-                  ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
-                  : defImg
-              }
-              alt=""
-            />
-          </div>
-          <StyledInfo>
-            <Subtitle>
-              {movie.original_title} {`(${movie.release_date?.slice(0, 4)})`}
-            </Subtitle>
-            <p>User score: {}</p>
+        <>
+          <StyledMovieCard>
+            <div>
+              <img
+                src={
+                  movie.poster_path
+                    ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
+                    : defImg
+                }
+                alt=""
+              />
+            </div>
+            <StyledInfo>
+              <Subtitle>
+                {movie.original_title} {`(${movie.release_date?.slice(0, 4)})`}
+              </Subtitle>
+              <p>User score: {}</p>
 
-            <Subtitle>Overview</Subtitle>
-            <p>{movie.overview}</p>
+              <Subtitle>Overview</Subtitle>
+              <p>{movie.overview}</p>
 
-            <Subtitle>Genres</Subtitle>
-            <p>{movie.genres?.map(genre => genre.name).join(', ')}</p>
-
-            <Additional>
+              <Subtitle>Genres</Subtitle>
+              <p>{movie.genres?.map(genre => genre.name).join(', ')}</p>
+            </StyledInfo>
+          </StyledMovieCard>
+          <Additional>
             <Subtitle>Additional information</Subtitle>
-              <NavLink>Cast</NavLink>
-              <NavLink>Reviews</NavLink>
-            </Additional>
-          </StyledInfo>
-        </StyledMovieCard>
+            <NavLink to="cast">Cast</NavLink>
+            <NavLink to="reviews">Reviews</NavLink>
+          </Additional>
+          <Outlet />
+        </>
       )}
     </>
   );
