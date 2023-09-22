@@ -31,8 +31,8 @@ const Cast = () => {
     };
 
     getMovie();
-  }, []);
-  return <div>Cast</div>;
+  }, [id]);
+  return <div>Cast{credits}{loading}</div>;
 };
 
 export default Cast;
