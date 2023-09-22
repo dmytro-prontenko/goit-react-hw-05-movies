@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { NavLink, Outlet, useParams } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
@@ -10,6 +10,7 @@ const Movie = () => {
   const [movie, setMovie] = useState({});
   const [loading, setLoading] = useState(false);
   const defImg = '../img/noun-not-found-poster.svg';
+  const navigate = useNavigate()
 
   useEffect(() => {
     const getMovie = async () => {
@@ -33,7 +34,7 @@ const Movie = () => {
 
   return (
     <>
-      <BackButton type="button">🔙</BackButton>
+      <BackButton type="button" onClick={()=>navigate('/')}>🔙</BackButton>
       {loading && <h3>Loading</h3>}
       {!loading && (
         <>
