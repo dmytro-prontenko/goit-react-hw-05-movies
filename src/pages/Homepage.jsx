@@ -4,19 +4,22 @@ import styled from 'styled-components';
 import { toast } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Homepage = () => {
   const URL =
     'https://api.themoviedb.org/3/trending/movie/day?language=en-US&api_key=aa52440038ee3147b8058c354c3c644b';
   const [trending, setTrending] = useState([]);
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const getTrending = async () => {
       setLoading(true);
       try {
-        const { data:{results} } = await axios.get(URL);
+        const {
+          data: { results },
+        } = await axios.get(URL);
         setTrending(results);
       } catch (error) {
         setTrending([]);
@@ -32,7 +35,7 @@ const Homepage = () => {
 
   const trendList = trending.map(({ id, original_title }) => {
     return (
-      <Link to={`/movies/${id}`} key={id} id={id}>
+      <Link state={{ from: location }} to={`/movies/${id}`} key={id} id={id}>
         {original_title}
       </Link>
     );

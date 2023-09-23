@@ -9,7 +9,6 @@ const Cast = () => {
   const [credits, setCredits] = useState([]);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
-  // const defImg = '../img/noun-not-found-poster.svg';
 
   useEffect(() => {
     const getMovie = async () => {
@@ -21,7 +20,6 @@ const Cast = () => {
           `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US&api_key=aa52440038ee3147b8058c354c3c644b`
         );
         setCredits(cast.slice(0, 8));
-        console.log(cast.slice(0, 8));
       } catch (error) {
         setCredits([]);
         setLoading(false);

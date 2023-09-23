@@ -1,16 +1,26 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  Link,
+  NavLink,
+  Outlet,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
+import defImg from '../img/noun-not-found-poster.svg';
 
 const Movie = () => {
   const { id } = useParams();
   // const URL = `https://api.themoviedb.org/3/movie/${id}?language=en-US&api_key=aa52440038ee3147b8058c354c3c644b`;
   const [movie, setMovie] = useState({});
   const [loading, setLoading] = useState(false);
-  const defImg = '../img/noun-not-found-poster.svg';
-  const navigate = useNavigate()
+  // const defImg = '../img/noun-not-found-poste';
+  const navigate = useNavigate();
+  const location = useLocation();
+  const goBackRef = useRef(location.state?.from || '/');
 
   useEffect(() => {
     const getMovie = async () => {
@@ -34,7 +44,9 @@ const Movie = () => {
 
   return (
     <>
-      <BackButton type="button" onClick={()=>navigate('/')}>🔙</BackButton>
+      <Link to={goBackRef.current} type="button">
+        <BackButton>🔙</BackButton>
+      </Link>
       {loading && <h3>Loading</h3>}
       {!loading && (
         <>
@@ -46,12 +58,18 @@ const Movie = () => {
                     ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
                     : defImg
                 }
-                alt=""
+                alt="movie.original_title"
+                width="342"
               />
             </div>
             <StyledInfo>
               <Subtitle>
-                {movie.original_title} {`(${movie.release_date ? movie.release_date.slice(0, 4) : 'unknown'})`}
+                {movie.original_title}{' '}
+                {`(${
+                  movie.release_date
+                    ? movie.release_date.slice(0, 4)
+                    : 'unknown'
+                })`}
               </Subtitle>
               <p>User score: {movie.vote_average * 10}%</p>
 

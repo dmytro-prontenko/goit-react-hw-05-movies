@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getMoviesByQuery } from 'services/api';
 import styled from 'styled-components';
@@ -10,6 +10,7 @@ const Movies = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   // const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm();
+  const location = useLocation();
 
   const onSubmit = async data => {
     setSearchParams(data.queryStr ? { query: data.queryStr } : {});
@@ -23,7 +24,7 @@ const Movies = () => {
           setMovies(results);
         })
         .catch(error => {
-          toast.error(error.message)
+          toast.error(error.message);
         });
     } else {
       setMovies([]);
@@ -42,8 +43,13 @@ const Movies = () => {
       <MoviesList>
         {movies?.map(movie => {
           return (
-            <Link to={`/movies/${movie.id}`} key={movie.id}>
-              {movie.title} ({movie.release_date ? movie.release_date.slice(0, 4):'unknown'})
+            <Link
+              state={{ from: location }}
+              to={`/movies/${movie.id}`}
+              key={movie.id}
+            >
+              {movie.title} (
+              {movie.release_date ? movie.release_date.slice(0, 4) : 'unknown'})
             </Link>
           );
         })}
@@ -65,8 +71,8 @@ export const MoviesList = styled.ol`
 `;
 
 export const StyledLink = styled(Link)`
-  list-style:decimal;
-`
+  list-style: decimal;
+`;
 export const SearchForm = styled.form`
   margin: 20px 0 0 25px;
   display: flex;
