@@ -51,9 +51,9 @@ const Movie = () => {
             </div>
             <StyledInfo>
               <Subtitle>
-                {movie.original_title} {`(${movie.release_date?.slice(0, 4)})`}
+                {movie.original_title} {`(${movie.release_date ? movie.release_date.slice(0, 4) : 'unknown'})`}
               </Subtitle>
-              <p>User score: {}</p>
+              <p>User score: {movie.vote_average * 10}%</p>
 
               <Subtitle>Overview</Subtitle>
               <p>{movie.overview}</p>
@@ -100,7 +100,7 @@ export const StyledInfo = styled.div`
 export const Additional = styled.ul`
   display: flex;
   flex-direction: column;
-  padding-left: 0;
+  padding-left: 30px;
   margin: 0;
 `;
 
