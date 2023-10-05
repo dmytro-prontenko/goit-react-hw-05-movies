@@ -19,7 +19,6 @@ const Reviews = () => {
           `https://api.themoviedb.org/3/movie/${id}/reviews?language=en-US&api_key=aa52440038ee3147b8058c354c3c644b`
         );
         setReviews(data.results);
-        console.log(data.results);
       } catch (error) {
         setReviews([]);
         setLoading(false);
@@ -32,7 +31,6 @@ const Reviews = () => {
   }, [id]);
 
   const reviewsList = reviews.map(review => {
-    console.log(`Avatar ${review.author_details.avatar_path}`);
     return (
       <StyledCard key={review.id}>
         <StyledReviewHeader>
@@ -57,7 +55,7 @@ const Reviews = () => {
   return (
     <>
       {loading && <Loader />}
-      <StyledList>{reviewsList}</StyledList>;
+      <StyledList>{reviewsList.length ? reviewsList : <p>There are no reviews yet</p>}</StyledList>;
     </>
   );
 };

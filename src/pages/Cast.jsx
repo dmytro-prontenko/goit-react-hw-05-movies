@@ -54,7 +54,11 @@ const Cast = () => {
 
   return (
     <>
-      <StyledList>{!casts.length && !loading ? <Loader /> : casts}</StyledList>;
+      {loading && <Loader />}
+      <StyledList>
+        {!casts.length ? <p>Unfortunately there are no information</p> : casts}
+      </StyledList>
+      ;
     </>
   );
 };
@@ -66,7 +70,7 @@ const StyledList = styled.ul`
   grid-template-rows: repeat(2, 1fr);
   grid-column-gap: 20px;
   grid-row-gap: 20px;
-  place-items:center;
+  place-items: center;
   margin: 0 auto;
   margin-top: 40px;
   padding: 0;
