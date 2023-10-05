@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Loader from 'components/Loader';
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
@@ -49,6 +50,7 @@ const Movies = () => {
         />
         <button>Search</button>
       </SearchForm>
+      {loading && <Loader />}
       <MoviesList>
         {movies?.map(movie => {
           return (
