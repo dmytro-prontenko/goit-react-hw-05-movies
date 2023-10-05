@@ -1,24 +1,21 @@
 import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import {
   Link,
   NavLink,
   Outlet,
   useLocation,
-  useNavigate,
   useParams,
 } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import defImg from '../img/noun-not-found-poster.svg';
+import Loader from 'components/Loader';
 
 const Movie = () => {
   const { id } = useParams();
-  // const URL = `https://api.themoviedb.org/3/movie/${id}?language=en-US&api_key=aa52440038ee3147b8058c354c3c644b`;
   const [movie, setMovie] = useState({});
   const [loading, setLoading] = useState(false);
-  // const defImg = '../img/noun-not-found-poste';
-  const navigate = useNavigate();
   const location = useLocation();
   const goBackRef = useRef(location.state?.from || '/');
 
@@ -47,7 +44,7 @@ const Movie = () => {
       <Link to={goBackRef.current} type="button">
         <BackButton>🔙</BackButton>
       </Link>
-      {loading && <h3>Loading</h3>}
+      {loading && <Loader />}
       {!loading && (
         <>
           <StyledMovieCard>
@@ -71,7 +68,7 @@ const Movie = () => {
                     : 'unknown'
                 })`}
               </Subtitle>
-              <p>User score: {movie.vote_average * 10}%</p>
+              <p>User score: {(movie.vote_average * 10).toFixed(2)}%</p>
 
               <Subtitle>Overview</Subtitle>
               <p>{movie.overview}</p>
@@ -85,7 +82,9 @@ const Movie = () => {
             <NavLink to="cast">Cast</NavLink>
             <NavLink to="reviews">Reviews</NavLink>
           </Additional>
-          <Outlet />
+          <Suspense fallback={<Loader />}>
+            <Outlet />
+          </Suspense>
         </>
       )}
     </>

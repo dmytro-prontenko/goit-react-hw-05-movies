@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { Link, useLocation } from 'react-router-dom';
+import Loader from 'components/Loader';
 
 const Homepage = () => {
   const URL =
@@ -44,7 +45,7 @@ const Homepage = () => {
   return (
     <>
       <TrendTitle>What's trending today</TrendTitle>
-      {loading && <h3>Loading</h3>}
+      {loading && <Loader />}
       <TrendList>{trendList}</TrendList>
     </>
   );

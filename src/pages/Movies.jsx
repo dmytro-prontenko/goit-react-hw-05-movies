@@ -1,33 +1,42 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getMoviesByQuery } from 'services/api';
-import styled from 'styled-components';
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
-  // const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm();
   const location = useLocation();
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async data => {
-    setSearchParams(data.queryStr ? { query: data.queryStr } : {});
+    setSearchParams(data.queryStr && { query: data.queryStr });
   };
   const query = searchParams.get('query');
 
   useEffect(() => {
     if (query) {
-      getMoviesByQuery(query)
-        .then(results => {
-          setMovies(results);
-        })
-        .catch(error => {
-          toast.error(error.message);
-        });
-    } else {
-      setMovies([]);
+      const getMovies = async () => {
+        setLoading(true);
+        try {
+          const { data } = await axios.get(
+            `https://api.themoviedb.org/3/search/movie?query=${query}&language=en-US&page=1&api_key=aa52440038ee3147b8058c354c3c644b`
+          );
+          console.log(data)
+          setMovies(data.results);
+        } catch (error) {
+          setMovies([]);
+          setLoading(false);
+          toast.error('Something went wrong. Please, try again');
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      getMovies();
     }
   }, [query]);
 

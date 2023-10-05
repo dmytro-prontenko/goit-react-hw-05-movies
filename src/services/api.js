@@ -8,3 +8,4 @@ export const getMoviesByQuery = async query => {
   );
   return results;
 };
+

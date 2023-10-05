@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import styled from 'styled-components';
 import Navbar from './Navbar';
 import { Outlet } from 'react-router-dom';
+import Loader from './Loader';
 
 const Layout = () => {
   return (
     <LayoutWrapper>
       <Navbar />
       <WrapperOutlet>
-        <Outlet />
+        <Suspense fallback={<Loader />}>
+          <Outlet />
+        </Suspense>
       </WrapperOutlet>
     </LayoutWrapper>
   );
