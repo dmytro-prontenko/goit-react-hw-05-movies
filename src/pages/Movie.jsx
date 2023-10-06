@@ -1,5 +1,5 @@
-import axios from 'axios';
-import React, { Suspense, useEffect, useRef, useState } from 'react';
+import Loader from 'components/Loader';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import {
   Link,
   NavLink,
@@ -8,9 +8,9 @@ import {
   useParams,
 } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { getMovie } from 'services/api';
 import styled from 'styled-components';
 import defImg from '../img/noun-not-found-poster.svg';
-import Loader from 'components/Loader';
 
 const Movie = () => {
   const { id } = useParams();
@@ -20,13 +20,11 @@ const Movie = () => {
   const goBackRef = useRef(location.state?.from || '/');
 
   useEffect(() => {
-    const getMovie = async () => {
+    if (!id) return;
+    const getMovieFromApi = async () => {
       setLoading(true);
       try {
-        const { data } = await axios.get(
-          `https://api.themoviedb.org/3/movie/${id}?language=en-US&api_key=aa52440038ee3147b8058c354c3c644b`
-        );
-        setMovie(data);
+        getMovie(id).then(resp => setMovie(resp));
       } catch (error) {
         setMovie([]);
         setLoading(false);
@@ -36,57 +34,54 @@ const Movie = () => {
       }
     };
 
-    getMovie();
+    getMovieFromApi();
   }, [id]);
 
   return (
     <>
+      {loading && <Loader />}
       <Link to={goBackRef.current} type="button">
         <BackButton>🔙</BackButton>
       </Link>
       {loading && <Loader />}
-      {!loading && (
-        <>
-          <StyledMovieCard>
-            <div>
-              <img
-                src={
-                  movie.poster_path
-                    ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
-                    : defImg
-                }
-                alt="movie.original_title"
-                width="342"
-              />
-            </div>
-            <StyledInfo>
-              <Subtitle>
-                {movie.original_title}{' '}
-                {`(${
-                  movie.release_date
-                    ? movie.release_date.slice(0, 4)
-                    : 'unknown'
-                })`}
-              </Subtitle>
-              <p>User score: {(movie.vote_average * 10).toFixed(2)}%</p>
+      <>
+        <StyledMovieCard>
+          <div>
+            <img
+              src={
+                movie.poster_path
+                  ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
+                  : defImg
+              }
+              alt="movie.original_title"
+              width="342"
+            />
+          </div>
+          <StyledInfo>
+            <Subtitle>
+              {movie.original_title}{' '}
+              {`(${
+                movie.release_date ? movie.release_date.slice(0, 4) : 'unknown'
+              })`}
+            </Subtitle>
+            <p>User score: {(movie.vote_average * 10).toFixed(2)}%</p>
 
-              <Subtitle>Overview</Subtitle>
-              <p>{movie.overview}</p>
+            <Subtitle>Overview</Subtitle>
+            <p>{movie.overview}</p>
 
-              <Subtitle>Genres</Subtitle>
-              <p>{movie.genres?.map(genre => genre.name).join(', ')}</p>
-            </StyledInfo>
-          </StyledMovieCard>
-          <Additional>
-            <Subtitle>Additional information</Subtitle>
-            <NavLink to="cast">Cast</NavLink>
-            <NavLink to="reviews">Reviews</NavLink>
-          </Additional>
-          <Suspense fallback={<Loader />}>
-            <Outlet />
-          </Suspense>
-        </>
-      )}
+            <Subtitle>Genres</Subtitle>
+            <p>{movie.genres?.map(genre => genre.name).join(', ')}</p>
+          </StyledInfo>
+        </StyledMovieCard>
+        <Additional>
+          <Subtitle>Additional information</Subtitle>
+          <NavLink to="cast">Cast</NavLink>
+          <NavLink to="reviews">Reviews</NavLink>
+        </Additional>
+        <Suspense fallback={<Loader />}>
+          <Outlet />
+        </Suspense>
+      </>
     </>
   );
 };

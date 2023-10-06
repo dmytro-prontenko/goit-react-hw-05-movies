@@ -1,27 +1,22 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import styled from 'styled-components';
 
-import 'react-toastify/dist/ReactToastify.css';
-import { Link, useLocation } from 'react-router-dom';
 import Loader from 'components/Loader';
+import { Link, useLocation } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
+import { getTrending } from 'services/api';
 
 const Homepage = () => {
-  const URL =
-    'https://api.themoviedb.org/3/trending/movie/day?language=en-US&api_key=aa52440038ee3147b8058c354c3c644b';
   const [trending, setTrending] = useState([]);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
-    const getTrending = async () => {
+    const getTrendMovies = async () => {
       setLoading(true);
       try {
-        const {
-          data: { results },
-        } = await axios.get(URL);
-        setTrending(results);
+        getTrending().then(resp => setTrending(resp));
       } catch (error) {
         setTrending([]);
         setLoading(false);
@@ -31,7 +26,7 @@ const Homepage = () => {
       }
     };
 
-    getTrending();
+    getTrendMovies();
   }, []);
 
   const trendList = trending.map(({ id, original_title }) => {

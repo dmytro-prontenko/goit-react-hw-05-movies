@@ -1,10 +1,10 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import Loader from 'components/Loader';
 import styled from 'styled-components';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Loader from 'components/Loader';
+import { getMovies } from 'services/api';
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
@@ -14,19 +14,16 @@ const Movies = () => {
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async data => {
-    setSearchParams(data.queryStr && { query: data.queryStr });
+    setSearchParams({ query: data.queryStr });
   };
   const query = searchParams.get('query');
 
   useEffect(() => {
-    if (query) {
-      const getMovies = async () => {
+    if (!query) return
+      const getMoviesList = async () => {
         setLoading(true);
         try {
-          const { data } = await axios.get(
-            `https://api.themoviedb.org/3/search/movie?query=${query}&language=en-US&page=1&api_key=aa52440038ee3147b8058c354c3c644b`
-          );
-          setMovies(data.results);
+          getMovies(query).then(resp => setMovies(resp))
         } catch (error) {
           setMovies([]);
           setLoading(false);
@@ -36,8 +33,7 @@ const Movies = () => {
         }
       };
 
-      getMovies();
-    }
+      getMoviesList();
   }, [query]);
 
   return (

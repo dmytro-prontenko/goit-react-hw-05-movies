@@ -1,11 +1,10 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import Loader from 'components/Loader';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import defImg from '../img/noun-not-found-poster.svg';
-import Loader from 'components/Loader';
+import { getCast } from 'services/api';
 import styled from 'styled-components';
-/* credits - https://api.themoviedb.org/3/movie/346698/credits?language=en-US&api_key=aa52440038ee3147b8058c354c3c644b */
+import defImg from '../img/noun-not-found-poster.svg';
 
 const Cast = () => {
   const [credits, setCredits] = useState([]);
@@ -13,15 +12,11 @@ const Cast = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    const getMovie = async () => {
+    if (!id) return;
+    const getCastList = async () => {
       setLoading(true);
       try {
-        const {
-          data: { cast },
-        } = await axios.get(
-          `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US&api_key=aa52440038ee3147b8058c354c3c644b`
-        );
-        setCredits(cast.slice(0, 8));
+        getCast(id).then(resp => setCredits(resp));
       } catch (error) {
         setCredits([]);
         setLoading(false);
@@ -31,7 +26,7 @@ const Cast = () => {
       }
     };
 
-    getMovie();
+    getCastList();
   }, [id]);
 
   const casts = credits.map(credit => {

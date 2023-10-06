@@ -1,10 +1,10 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import Loader from 'components/Loader';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { getReviews } from 'services/api';
 import styled from 'styled-components';
 import defImg from '../img/noun-not-found-poster.svg';
-import Loader from 'components/Loader';
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
@@ -12,13 +12,11 @@ const Reviews = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    const getReviews = async () => {
+    if (!id) return;
+    const getReviewsList = async () => {
       setLoading(true);
       try {
-        const { data } = await axios.get(
-          `https://api.themoviedb.org/3/movie/${id}/reviews?language=en-US&api_key=aa52440038ee3147b8058c354c3c644b`
-        );
-        setReviews(data.results);
+        getReviews(id).then(resp => setReviews(resp));
       } catch (error) {
         setReviews([]);
         setLoading(false);
@@ -27,7 +25,7 @@ const Reviews = () => {
         setLoading(false);
       }
     };
-    getReviews();
+    getReviewsList();
   }, [id]);
 
   const reviewsList = reviews.map(review => {
@@ -55,7 +53,10 @@ const Reviews = () => {
   return (
     <>
       {loading && <Loader />}
-      <StyledList>{reviewsList.length ? reviewsList : <p>There are no reviews yet</p>}</StyledList>;
+      <StyledList>
+        {reviewsList.length ? reviewsList : <p>There are no reviews yet</p>}
+      </StyledList>
+      ;
     </>
   );
 };
