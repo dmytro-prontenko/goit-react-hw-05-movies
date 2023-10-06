@@ -14,7 +14,7 @@ import defImg from '../img/noun-not-found-poster.svg';
 
 const Movie = () => {
   const { id } = useParams();
-  const [movie, setMovie] = useState({});
+  const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const goBackRef = useRef(location.state?.from || '/');
@@ -44,44 +44,48 @@ const Movie = () => {
         <BackButton>🔙</BackButton>
       </Link>
       {loading && <Loader />}
-      <>
-        <StyledMovieCard>
-          <div>
-            <img
-              src={
-                movie.poster_path
-                  ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
-                  : defImg
-              }
-              alt="movie.original_title"
-              width="342"
-            />
-          </div>
-          <StyledInfo>
-            <Subtitle>
-              {movie.original_title}{' '}
-              {`(${
-                movie.release_date ? movie.release_date.slice(0, 4) : 'unknown'
-              })`}
-            </Subtitle>
-            <p>User score: {(movie.vote_average * 10).toFixed(2)}%</p>
+      {movie && (
+        <>
+          <StyledMovieCard>
+            <div>
+              <img
+                src={
+                  movie.poster_path
+                    ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
+                    : defImg
+                }
+                alt="movie.original_title"
+                width="342"
+              />
+            </div>
+            <StyledInfo>
+              <Subtitle>
+                {movie.original_title}{' '}
+                {`(${
+                  movie.release_date
+                    ? movie.release_date.slice(0, 4)
+                    : 'unknown'
+                })`}
+              </Subtitle>
+              <p>User score: {(movie.vote_average * 10).toFixed(2)}%</p>
 
-            <Subtitle>Overview</Subtitle>
-            <p>{movie.overview}</p>
+              <Subtitle>Overview</Subtitle>
+              <p>{movie.overview}</p>
 
-            <Subtitle>Genres</Subtitle>
-            <p>{movie.genres?.map(genre => genre.name).join(', ')}</p>
-          </StyledInfo>
-        </StyledMovieCard>
-        <Additional>
-          <Subtitle>Additional information</Subtitle>
-          <NavLink to="cast">Cast</NavLink>
-          <NavLink to="reviews">Reviews</NavLink>
-        </Additional>
-        <Suspense fallback={<Loader />}>
-          <Outlet />
-        </Suspense>
-      </>
+              <Subtitle>Genres</Subtitle>
+              <p>{movie.genres?.map(genre => genre.name).join(', ')}</p>
+            </StyledInfo>
+          </StyledMovieCard>
+          <Additional>
+            <Subtitle>Additional information</Subtitle>
+            <NavLink to="cast">Cast</NavLink>
+            <NavLink to="reviews">Reviews</NavLink>
+          </Additional>
+          <Suspense fallback={<Loader />}>
+            <Outlet />
+          </Suspense>
+        </>
+      )}
     </>
   );
 };
